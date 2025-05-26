@@ -1,7 +1,14 @@
 let scene, camera, renderer, player, obstacles = [];
 let moveTargetX = 0, score = 0, highScore = 0;
+
 const speed = 0.1;
 const lanePositions = [-3, 0, 3]; // LEFT to RIGHT
+
+// Jump variables
+let isJumping = false;
+let jumpVelocity = 0;
+const gravity = -0.02;
+const jumpStrength = 0.4;
 
 init();
 animate();
@@ -47,10 +54,35 @@ function init() {
   // Controls
   document.addEventListener('keydown', (e) => {
     if (["ArrowLeft", "a", "A", "q", "Q"].includes(e.key)) moveLeft();
-    if (["ArrowRight", "d", "D"].includes(e.key)) moveRight();
+    if (["ArrowRight", "d", "D", "e", "E"].includes(e.key)) moveRight();
+    if (["ArrowUp", "w", "W", " "].includes(e.key)) jump();
   });
 
+  // Tap/click for lane moves
+  window.addEventListener('touchstart', handleTapOrClick);
+  window.addEventListener('mousedown', handleTapOrClick);
+
+  // Jump button
+  document.getElementById('jumpBtn').addEventListener('click', jump);
+
   spawnObstacle();
+}
+
+function handleTapOrClick(event) {
+  let x;
+  if(event.touches && event.touches.length > 0) {
+    x = event.touches[0].clientX;
+  } else if(event.clientX !== undefined) {
+    x = event.clientX;
+  } else {
+    return;
+  }
+
+  if (x < window.innerWidth / 2) {
+    moveLeft();
+  } else {
+    moveRight();
+  }
 }
 
 function moveLeft() {
@@ -64,6 +96,13 @@ function moveRight() {
   let index = lanePositions.indexOf(moveTargetX);
   if (index < lanePositions.length - 1) {
     moveTargetX = lanePositions[index + 1];
+  }
+}
+
+function jump() {
+  if (!isJumping) {
+    isJumping = true;
+    jumpVelocity = jumpStrength;
   }
 }
 
@@ -84,6 +123,17 @@ function animate() {
   // Player lane movement
   player.position.x += (moveTargetX - player.position.x) * 0.2;
 
+  // Jump logic
+  if (isJumping) {
+    player.position.y += jumpVelocity;
+    jumpVelocity += gravity;
+    if (player.position.y <= 0.5) {
+      player.position.y = 0.5;
+      isJumping = false;
+      jumpVelocity = 0;
+    }
+  }
+
   // Move obstacles
   obstacles.forEach((obs, index) => {
     obs.position.z += speed * 10;
@@ -101,8 +151,10 @@ function animate() {
     }
 
     // Collision detection
+    // Player and obstacle collision on X and Z; ignore Y so player can jump over
     if (Math.abs(obs.position.z - player.position.z) < 0.75 &&
-        Math.abs(obs.position.x - player.position.x) < 0.75) {
+        Math.abs(obs.position.x - player.position.x) < 0.75 &&
+        player.position.y <= 0.75) {  // Only collide if player is low (not jumping)
       alert("Game Over! Score: " + score);
       location.reload();
     }
@@ -110,3 +162,9 @@ function animate() {
 
   renderer.render(scene, camera);
 }
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
