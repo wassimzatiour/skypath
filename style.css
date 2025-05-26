@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #000;
+  font-family: Arial, sans-serif;
+}
+
+.hud {
+  position: absolute;
+  color: white;
+  font-size: 18px;
+  z-index: 10;
+  padding: 10px;
+}
+
+.top-left {
+  top: 0;
+  left: 0;
+}
+
+.top-right {
+  top: 0;
+  right: 0;
+  text-align: right;
+}
+
+button {
+  position: absolute;
+  bottom: 10px;
+  font-size: 18px;
+  padding: 8px 16px;
+  z-index: 10;
+  background: #111;
+  color: white;
+  border: 1px solid white;
+  cursor: pointer;
+  margin: 5px;
+}
+
+#restartBtn {
+  left: 10px;
+}
+
+#supportBtn {
+  right: 10px;
+}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>3D Runner Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="hud top-left">Created by: Wassim Zatiour</div>
+  <div class="hud top-right">
+    <div id="score">Score: 0</div>
+    <div id="highScore">High Score: 0</div>
+  </div>
+  <button id="restartBtn" onclick="location.reload()">Restart</button>
+  <button id="supportBtn" onclick="window.open('https://paypal.me/Wassim805', '_blank')">Support Me</button>
+  <audio id="bgm" autoplay loop>
+    <source src="AbstractTunnelVJMotionBackgroundNeonLightTunnelFreeVJLoops4KVJLoops.mp3" type="audio/mpeg">
+  </audio>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
