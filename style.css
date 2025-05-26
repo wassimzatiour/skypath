@@ -3,6 +3,7 @@ body {
   overflow: hidden;
   background: #000;
   font-family: Arial, sans-serif;
+  touch-action: manipulation; /* prevent default zoom on mobile */
 }
 
 .hud {
@@ -43,4 +44,10 @@ button {
 
 #supportBtn {
   right: 10px;
+}
+
+#jumpBtn {
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 70px;
 }
